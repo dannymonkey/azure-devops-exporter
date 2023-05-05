@@ -30,9 +30,17 @@ RUN ["./azure-devops-exporter", "--help"]
 #############################################
 # Final
 #############################################
-FROM gcr.io/distroless/static
+FROM ubuntu:20.04
 ENV LOG_JSON=1
 WORKDIR /
 COPY --from=test /app .
-USER 1000:1000
-ENTRYPOINT ["/azure-devops-exporter"]
+RUN \
+  apt-get update \
+  && apt-get install -y --no-install-recommends \
+  apt-transport-https \
+  ca-certificates \
+  gnupg-agent \
+  curl \
+  wget \
+  vim \
+  telnet
